@@ -4,23 +4,19 @@ import (
 	"fmt"
 	"myatm/account"
 	"myatm/auth"
-	"myatm/operations"
-	"myatm/utils"
 )
 
 func main() {
 	accounts := make(map[string]*account.Account)
 	accounts["123456"] = &account.Account{AccountNumber: "123456", Pin: "1234", Balance: 1000.0}
 
-	accountNumber, _ := utils.ReadStringInput("Enter account number: ")
-	pin, _ := utils.ReadStringInput("Enter PIN: ")
+	var accountNumber, pin string
+	fmt.Println("Enter account number:")
+	fmt.Scan(&accountNumber)
+	fmt.Println("Enter PIN:")
+	fmt.Scan(&pin)
 
-	if !utils.IsValidAccountNumber(accountNumber) || !utils.ValidatePIN(pin) {
-		fmt.Println("Invalid account number or PIN format")
-		return
-	}
-
-	acc, authenticated := auth.Authenticate(accountNumber, pin, accounts)
+	account, authenticated := auth.Authenticate(accountNumber, pin, accounts)
 	if !authenticated {
 		fmt.Println("Authentication failed")
 		return
@@ -36,14 +32,18 @@ func main() {
 
 		switch option {
 		case 1:
-			fmt.Printf("Your balance is: %.2f\n", operations.CheckBalance(acc))
+			fmt.Printf("Your balance is: %.2f\n", account.CheckBalance())
 		case 2:
-			depositAmount, _ := utils.ReadFloatInput("Enter deposit amount: ")
-			operations.Deposit(acc, depositAmount)
+			var depositAmount float64
+			fmt.Println("Enter deposit amount:")
+			fmt.Scan(&depositAmount)
+			account.Deposit(depositAmount)
 			fmt.Println("Deposit successful")
 		case 3:
-			withdrawAmount, _ := utils.ReadFloatInput("Enter withdrawal amount: ")
-			if operations.Withdraw(acc, withdrawAmount) {
+			var withdrawAmount float64
+			fmt.Println("Enter withdrawal amount:")
+			fmt.Scan(&withdrawAmount)
+			if account.Withdraw(withdrawAmount) {
 				fmt.Println("Withdrawal successful")
 			} else {
 				fmt.Println("Insufficient funds")
