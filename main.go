@@ -8,9 +8,10 @@ import (
 
 func main() {
 	accounts := make(map[string]*account.Account)
-	accounts["123456"] = &account.Account{AccountNumber: "123456", Pin: "1234", Balance: 1000.0}
+	accounts["123456"] = &account.Account{AccountNumber: "123456", Pin: 1234, Balance: 999.0}
 
-	var accountNumber, pin string
+	var accountNumber string
+	var pin int64
 	fmt.Println("Enter account number:")
 	fmt.Scan(&accountNumber)
 	fmt.Println("Enter PIN:")
@@ -37,8 +38,9 @@ func main() {
 			var depositAmount float64
 			fmt.Println("Enter deposit amount:")
 			fmt.Scan(&depositAmount)
-			account.Deposit(depositAmount)
-			fmt.Println("Deposit successful")
+			AvilableBalance := account.Deposit(depositAmount)
+			fmt.Println("Deposit successful, Total Avilable Balance:", AvilableBalance)
+
 		case 3:
 			var withdrawAmount float64
 			fmt.Println("Enter withdrawal amount:")
