@@ -1,6 +1,7 @@
 package account
 
 type Account struct {
+	CustomerName  string
 	AccountNumber string
 	Pin           int64
 	Balance       float64
